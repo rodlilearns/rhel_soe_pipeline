@@ -1,0 +1,26 @@
+---
+- name: Firewall Configuration
+  hosts: rhel_servers
+  tasks:
+
+    - name: Install firewalld
+      ansible.builtin.dnf:
+        state: present
+        name: firewalld
+      become: yes
+
+    - name: Enable firewalld
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: yes
+      become: yes
+
+    - name: Add ssh port to internal zone
+      firewalld:
+        zone: internal
+        service: ssh
+        state: enabled
+        immediate: yes
+        permanent: yes
+      become: yes
