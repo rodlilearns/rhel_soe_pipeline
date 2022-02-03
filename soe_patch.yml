@@ -1,0 +1,42 @@
+---
+- name: Patch software
+  hosts: rhel_servers
+  gather_facts: yes
+
+  vars_files:
+    - group_vars/soe_vars.yml
+
+  tasks:
+
+    - name: Clean up repos
+      ansible.builtin.yum_repository:
+        name: "*"
+        state: absent
+      notify: yum-clean-metadata
+
+    - name: Install Katello-CA
+      ansible.builtin.dnf:
+        name: "{{ soe.rhsm_satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        state: present
+      become: yes
+    
+    # - name: Install Katello-CA 
+    #   command: yum localinstall -y "{{ soe.satellite_dns }}"
+    #   become: yes
+
+    - name: Subscribe to Satellite
+      community.general.redhat_subscription:
+        force_register: yes
+        org_id: "{{ soe.org_id }}"
+        activationkey: "{{ soe.activationkey }}"
+      become: yes
+# try to refactor below task for idempotency
+    - name: Ensure RHSM managed repos
+      command: subscription-manager config --rhsm.manage_repos=1
+      become: true
+
+    - name: Perform full patching
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      become: yes
