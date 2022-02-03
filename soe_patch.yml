@@ -1,5 +1,5 @@
 ---
-- name: Patch software
+- name: Software Patching
   hosts: rhel_servers
   gather_facts: yes
 
