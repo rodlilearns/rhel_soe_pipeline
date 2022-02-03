@@ -1,0 +1,17 @@
+---
+- name: Network Configuration
+  hosts: rhel_servers
+
+  tasks:
+
+    - name: Disable IPv6 for any network interface card but loopback
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/network
+        regexp: '^NETWORKING_IPV6='
+        line: NETWORKING_IPV6=no
+    
+    - name: Disable IPv6 autoconfiguration
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/network
+        regexp: '^IPV6_AUTOCONF='
+        line: IPV6_AUTOCONF=no
