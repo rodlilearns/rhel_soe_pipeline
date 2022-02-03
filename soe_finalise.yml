@@ -1,0 +1,10 @@
+---
+- name: Red Hat Subscription Release
+  hosts: rhel_servers
+
+  tasks:
+
+    - name: Unsubscribe from Red Hat Satellite
+      community.general.redhat_subscription:
+        state: absent
+      become: yes
