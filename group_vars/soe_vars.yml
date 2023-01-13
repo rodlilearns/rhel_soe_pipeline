@@ -1,5 +1,6 @@
 ---
 soe:
-  rhsm_satellite_url:
-  org_id:
-  activationkey:
+  rhsm_satellite_url: "{{ vault_rhsm_satellite_url }}"
+  org_id: rodli
+  activationkey: "RHEL9 Workstation"
+  break_glass_admin: "{{ vault_break_glass_admin_password }}"
