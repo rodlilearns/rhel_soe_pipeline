@@ -1,0 +1,18 @@
+---
+- name: Developer software packages
+  ansible.builtin.dnf:
+    name: '@Server with GUI'
+    state: present
+  become: true
+
+- name: Get current systemd default
+  ansible.builtin.command: "systemctl get-default"
+  register: result_systemdefault
+
+- name: Ensure GNOME starts everytime the system boots
+  ansible.builtin.command: "systemctl set-default graphical.target"
+  when: graphical not in result_systemdefault.stdout
+  become: true
+...
+# How to install GUI for RHEL: https://access.redhat.com/solutions/5238
+# Getting started with GNOME Desktop env: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/pdf/getting_started_with_the_gnome_desktop_environment/red_hat_enterprise_linux-9-getting_started_with_the_gnome_desktop_environment-en-us.pdf

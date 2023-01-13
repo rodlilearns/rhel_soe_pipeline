@@ -1,0 +1,16 @@
+---
+# tasks file for roles/role_rhel9_dev_soe_configs
+- name: Developer software package
+  ansible.builtin.include_role:
+    name: developer_packages
+    tasks_from: developer_software_packages.yml
+
+- name: Graphical user interface
+  ansible.builtin.include_role:
+    name: developer_packages
+    tasks_from: developer_gui.yml
+
+- name: Developer software tools
+  ansible.builtin.include_role:
+    name: developer_tools
+    tasks_from: developer_tools.yml
