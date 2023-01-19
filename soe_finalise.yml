@@ -1,6 +1,6 @@
 ---
 - name: Red Hat Subscription Release
-  hosts: rhel_servers
+  hosts: soe_{{ soe_version }}
 
   tasks:
 

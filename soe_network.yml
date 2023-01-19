@@ -1,18 +1,47 @@
-# https://github.com/juju4/ansible-ipv6/blob/master/tasks/ipv6-disable.yml
 ---
 - name: Network Configuration
-  hosts: rhel_servers
+  hosts: soe_{{ soe_version }}
+  gather_facts: false
+  vars_files:
+    - group_vars/vault.yml
+    - group_vars/soe_vars.yml
 
   tasks:
+    - name: Get the contents of the sysconfig_network file
+      ansible.builtin.command: cat "{{ soe.sysconfig_network }}" 
+      register: result_sysconfig
+
+    - name: Check current state of IPv6 settings
+      ansible.builtin.debug:
+        msg: "IPv6 is currently enabled"
+      when: '"NETWORKING_IPV6=yes" in result_sysconfig.stdout or "IPV6_AUTOCONF=yes" in result_sysconfig.stdout'
 
     - name: Disable IPv6 for any network interface card but loopback
       ansible.builtin.lineinfile:
-        path: /etc/sysconfig/network
+        path: "{{ soe.sysconfig_network }}"
         regexp: '^NETWORKING_IPV6='
-        line: NETWORKING_IPV6=no
+        line: "NETWORKING_IPV6=no"
+        backup: yes
+      when: '"NETWORKING_IPV6=yes" in result_sysconfig.stdout or "NETWORKING_IPV6=yes" not in result_sysconfig.stdout and "NETWORKING_IPV6=no" not in result_sysconfig.stdout'
+      become: true
     
     - name: Disable IPv6 autoconfiguration
       ansible.builtin.lineinfile:
-        path: /etc/sysconfig/network
+        path: "{{ soe.sysconfig_network }}"
         regexp: '^IPV6_AUTOCONF='
-        line: IPV6_AUTOCONF=no
+        line: "IPV6_AUTOCONF=no"
+        backup: yes
+      when: '"IPV6_AUTOCONF=yes" in result_sysconfig.stdout or "IVP6_AUTOCONF=yes" not in result_sysconfig.stdout and "IVP6_AUTOCONF=no" not in result_sysconfig.stdout'
+      become: true
+
+    - name: Get the contents of the sysconfig_network file after modification
+      ansible.builtin.command: cat "{{ soe.sysconfig_network }}" 
+      register: result_sysconfig
+
+    - name: Check the state of IPv6 settings after modification
+      ansible.builtin.debug:
+        msg: "IPv6 has been successfully disabled"
+      when: '"NETWORKING_IPV6=no" in result_sysconfig.stdout and "IPV6_AUTOCONF=no" in result_sysconfig.stdout'
+...
+# Example playbook to disable IPv6. https://github.com/juju4/ansible-ipv6/blob/master/tasks/ipv6-disable.yml
+# Red Hat Solution: How do I disable or enable the IPv6 protocol in RHEL? https://access.redhat.com/solutions/8709#rhel89disable

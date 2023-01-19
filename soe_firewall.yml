@@ -1,6 +1,6 @@
 ---
 - name: Firewall Configuration
-  hosts: rhel_servers
+  hosts: soe_{{ soe_version }}
   tasks:
 
     - name: Install firewalld
