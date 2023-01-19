@@ -1,0 +1,12 @@
+---
+aws:
+  ec2_ami_name_filter: "RHEL-9*Access*"
+  region: "{{ vault_region }}"
+  sec_group: "{{ vault_security_group }}"
+  subnet_id: "{{ vault_subnet_id }}"
+  key: "{{ vault_key }}"
+  id_name: "{{ vault_id_name }}"
+  id_suffix: '{{ lookup("pipe","date +%s") }}'
+  instance_type: t2.micro
+  owners: "{{ vault_owners }}"
+  tags: '{"Name":"SOE_RHEL9", "costCode":"x_department"}'

@@ -1,6 +1,16 @@
 ---
+---
 soe:
   rhsm_satellite_url: "{{ vault_rhsm_satellite_url }}"
   org_id: rodli
   activationkey: "RHEL9 Workstation"
-  break_glass_admin: "{{ vault_break_glass_admin_password }}"
+
+  break_glass_admin: "{{ vault_break_glass_admin }}"
+  break_glass_admin_password: "{{ vault_break_glass_admin_password }}"
+
+  ssh_key_bits: 2048
+  ssh_key_file: '.ssh/id_rsa'
+
+  sysconfig_network: /etc/sysconfig/network
+  ssh_banner_src: ./files/banner.txt
+  ssh_banner_dest: /etc/banner
