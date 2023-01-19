@@ -1,28 +1,21 @@
 ---
 - name: Software Patching
-  hosts: rhel_servers
+  hosts: soe_{{ soe_version }}
   gather_facts: yes
 
   vars_files:
     - group_vars/soe_vars.yml
+    - group_vars/vault.yml
 
   tasks:
 
     - name: Clean up repos
-      ansible.builtin.yum_repository:
-        name: "*"
-        state: absent
-      notify: yum-clean-metadata
-
-    - name: Install Katello-CA
-      ansible.builtin.dnf:
-        name: "{{ soe.rhsm_satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
-        state: present
-      become: yes
+      ansible.builtin.command: rm -rf /etc/yum.repos.d/*
+      become: true
     
-    # - name: Install Katello-CA 
-    #   command: yum localinstall -y "{{ soe.satellite_dns }}"
-    #   become: yes
+    - name: Install Katello-CA 
+      ansible.builtin.command: yum localinstall -y --nogpgcheck "{{ soe.rhsm_satellite_url }}"/pub/katello-ca-consumer-latest.noarch.rpm
+      become: yes
 
     - name: Subscribe to Satellite
       community.general.redhat_subscription:
@@ -30,10 +23,17 @@
         org_id: "{{ soe.org_id }}"
         activationkey: "{{ soe.activationkey }}"
       become: yes
-# try to refactor below task for idempotency
+
     - name: Ensure RHSM managed repos
-      command: subscription-manager config --rhsm.manage_repos=1
-      become: true
+      block:
+        - name: Retrieve RHSM config
+          ansible.builtin.command: cat /etc/rhsm/rhsm.conf
+          register: result_rhsmconf
+          become: true
+        - name: Manage generation of yum repos for subscribed content switch
+          ansible.builtin.command: subscription-manager config --rhsm.manage_repos=1
+          when: '"manage_repos = 1" in result_rhsmconf'
+          become: true
 
     - name: Perform full patching
       ansible.builtin.dnf:
