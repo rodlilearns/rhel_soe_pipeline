@@ -1,0 +1,22 @@
+---
+- name: Install xrdp
+  ansible.builtin.dnf:
+    name: xrdp
+
+- name: Configure a firewall rule to enable VNC access to the server
+  ansible.posix.firewalld:
+    port: 3389/tcp
+    permanent: true
+    state: enabled
+  notify: reload firewalld
+# Allowing the vnc-server service in your firewall opens ports from 5900 to 5903. If you need to enable access to additional server users, you must open ports above 5903 by specifying the port numbers.
+
+- name: Start and enable the xrdp server service
+  ansible.builtin.service:
+    name: xrdp
+    state: started
+    enabled: true
+...
+# Configure RHEL server to enable a remote desktop connection from a single client https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/getting_started_with_the_gnome_desktop_environment/remotely-accessing-the-desktop-as-a-single-user_getting-started-with-the-gnome-desktop-environment#enabling-desktop-sharing-on-the-server-using-gnome_remotely-accessing-the-desktop-as-a-single-user
+# xrdp not provided by Red Hat, but can be installed from EPEL https://access.redhat.com/solutions/275423, https://learn.microsoft.com/en-us/answers/questions/893242/wanna-install-and-configure-xrdp-to-use-remote-des
+# Install xrdp on RHEL https://www.itzgeek.com/how-tos/linux/centos-how-tos/how-to-install-xrdp-on-red-hat-enterprise-linux-8.html, https://www.youtube.com/watch?v=XL-IgKKKsAs

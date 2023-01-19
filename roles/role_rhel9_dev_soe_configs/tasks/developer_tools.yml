@@ -2,45 +2,33 @@
 - name: Install developer tools
   ansible.builtin.dnf:
     name:
-      - atom # text editor with support for plug-ins written in JavaScript, and embedded Git Control
-      - bluefish # text editor with a variety of tools for programming and website dev. Supports HTML, XHTML, CSS, XML, PHP, C, C++, JavaScript, Java, Go, Vala, Ada, D, SQL, Perl, ColdFusion, JSP, Python, Ruby, and shell.
-      - calligra # graphic art and office suite by KDE
-      - chromium # web browser. Requires epel repository
-      - code # text editor. Requires RPM repository maintained by Microsoft # https://computingforgeeks.com/how-to-install-visual-studio-code-on-centos-8-rhel-8/
-      - dotnet-sdk-7.0 # general-purpose development platform
-      - eclipse # https://snapcraft.io/install/eclipse/rhel
-      - dbeaver-ce # database tool. supports MySQL, PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access, Teradata, Firebird, Derby, etc. # https://snapcraft.io/install/dbeaver-ce/rhel
-      - devtoolset-9 # https://access.redhat.com/documentation/en-us/red_hat_developer_toolset/9/html/user_guide/chap-red_hat_developer_toolset#sect-Red_Hat_Developer_Toolset-Install
-      - # docker-ce # not supported in RHEL 9. RHEL moved from Docker to Podman # https://www.redhat.com/en/blog/rhel-8-enables-containers-tools-software-craftsmanship-0 # https://access.redhat.com/discussions/6967008 # https://docs.docker.com/engine/install/rhel/ 
-      - filezilla # file transfer tool
-      - firefox # web browser
-      - gbd
+      - '@Development Tools'
+      - bluefish
+      - chromium
+      - code
+      - dotnet-sdk-7.0
+      - dnf-utils
+      - filezilla
+      - firefox
       - gcc-gfortran
-      - geany # text editor # might need a custom product # https://pkgs.org/download/geany
-      - geany-plugins-addons
-      - geany-plugins-geanyvc
-      - gimp # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/9.0_release_notes/technology_previews
+      - gimp
       - git
-      - git2u
-      - gitg
-      - gnote # note taking for GNOME
-      - hamster-time-tracker
-      - hercules # verfication tool
-      - hercstudio
-      - inkscape # https://snapcraft.io/install/inkscape/rhel
+      - inkscape
       - java-17-openjdk
-      - libreoffice
       - llvm-toolset
-      - maven # build automation tool for Java projects # https://access.redhat.com/documentation/es-es/red_hat_data_grid/6/html/getting_started_guide/download_maven
+      - ltrace
+      - maven
       - meld
       - mlocate
-      - mssql # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/pdf/configuring_and_using_database_servers/red_hat_enterprise_linux-9-configuring_and_using_database_servers-en-us.pdf
-      - pinta # drawing/image editing tool
-      - qgit # view Git Trees
-      - rstudio
+      - papi
+      - pcp-zeroconf
+      - perf
+      - rpmdevtools
+      - strace
       - sysstat
       - systemtap
       - valgrind
+  become: true
 ...
 # Developing C and C++ apps in RHEL9: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/developing_c_and_cpp_applications_in_rhel_9/index
 # OpenJDK17: https://access.redhat.com/documentation/en-us/openjdk/17/html/installing_and_using_openjdk_17_on_rhel/installing-openjdk11-on-rhel8_openjdk

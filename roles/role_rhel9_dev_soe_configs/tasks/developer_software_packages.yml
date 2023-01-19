@@ -2,18 +2,18 @@
 - name: Install developer software packages
   ansible.builtin.dnf:
     name:
-      - snapd
       - golang
-      - nodejs010
+      - nodejs
       - numpy
       - p7zip 
-      - pzip-gui
-      - python36
-      - python36-pymssql
-      - python36-scipy
-      - python36-sqlalchemy
-      - python36-urllib3
-      - R
-    become: true
+      - p7zip-gui
+      - python3
+      - python3-scipy
+      - python3-sqlalchemy
+      - python3-urllib3
+    state: present
+  become: true
 ...
 # How to install p7zip on RHEL8: https://linuxconfig.org/how-to-install-p7zip-on-redhat-8
+# May need code ready builder repo for R dependencies: https://community.oracle.com/tech/apps-infra/discussion/4482273/how-to-install-r-programming-language
+# Install atom on RHEL: https://snapcraft.io/install/atom/rhel
